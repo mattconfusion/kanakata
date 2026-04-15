@@ -53,9 +53,13 @@ header {
 }
 
 .large-kana {
-  font-size: clamp(4rem, 20vw, 8rem);
+  font-size: clamp(2.5rem, 12vw, 7rem);
   font-weight: 700;
-  line-height: 1;
+  line-height: 1.2;
+  white-space: nowrap;
+  max-width: 100%;
+  text-align: center;
+  overflow: hidden;
 }
 
 .composition-display {
@@ -67,13 +71,20 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .romaji-label {
   font-size: clamp(2rem, 10vw, 4rem);
   font-weight: 600;
   color: var(--accent-color);
-  flex-shrink: 0; /* Don't shrink the label */
+  flex-shrink: 0;
+  white-space: nowrap;
+  max-width: 100%;
+  text-align: center;
+  overflow: hidden;
 }
 
 .scoreboard {

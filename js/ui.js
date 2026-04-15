@@ -41,8 +41,18 @@ export function showNotification(message, duration = 3000) {
   }, duration);
 }
 
+function getKanaFontSize(kana) {
+  const len = kana.length;
+  if (len <= 1) return 'clamp(4rem, 25vw, 8rem)';
+  if (len <= 2) return 'clamp(3.5rem, 20vw, 7rem)';
+  if (len <= 4) return 'clamp(2.5rem, 15vw, 5rem)';
+  if (len <= 6) return 'clamp(2rem, 12vw, 4rem)';
+  return 'clamp(1.5rem, 10vw, 3rem)';
+}
+
 export function renderKanaToRomaji(question, scoreboard) {
   const container = document.getElementById('quiz-1-container');
+  const fontSize = getKanaFontSize(question.kana);
   container.innerHTML = `
     <div class="scoreboard">
       <span>Tier: ${scoreboard.tier}</span>
@@ -52,7 +62,7 @@ export function renderKanaToRomaji(question, scoreboard) {
       <span>✗ ${scoreboard.wrong}</span>
     </div>
     <div class="quiz-card">
-      <div class="large-kana">${question.kana}</div>
+      <div class="large-kana" style="font-size: ${fontSize}">${question.kana}</div>
       <input type="text" id="romaji-input" placeholder="Type romaji..." autocomplete="off" autofocus>
       <div class="nav-buttons" style="width: 100%; gap: 0.5rem;">
           <button class="btn-primary" id="submit-answer" style="flex: 1;">Submit</button>
@@ -77,6 +87,15 @@ export function showRevealButton() {
   if (btn) btn.classList.remove('hidden');
 }
 
+function getRomajiFontSize(romaji) {
+  const text = String(romaji);
+  const len = text.length;
+  if (len <= 4) return 'clamp(2rem, 15vw, 4rem)';
+  if (len <= 8) return 'clamp(1.5rem, 10vw, 3rem)';
+  if (len <= 12) return 'clamp(1.25rem, 8vw, 2.5rem)';
+  return 'clamp(1rem, 6vw, 2rem)';
+}
+
 export function renderRomajiToKana(question, scriptData, scoreboard, composition = []) {
   const container = document.getElementById('quiz-2-container');
   const unlockedKana = scriptData.filter(item => item.tier <= scoreboard.tier);
@@ -88,6 +107,9 @@ export function renderRomajiToKana(question, scriptData, scoreboard, composition
     compositionDisplay = `<div class="composition-display">${composition.join('')}</div>`;
   }
 
+  const romajiText = question.phonetic || question.romaji;
+  const fontSize = getRomajiFontSize(romajiText);
+
   container.innerHTML = `
     <div class="scoreboard">
       <span>Tier: ${scoreboard.tier}</span>
@@ -97,7 +119,7 @@ export function renderRomajiToKana(question, scriptData, scoreboard, composition
       <span>✗ ${scoreboard.wrong}</span>
     </div>
     <div class="quiz-card">
-      <div class="romaji-label">${question.phonetic || question.romaji}</div>
+      <div class="romaji-label" style="font-size: ${fontSize}">${romajiText}</div>
       ${compositionDisplay}
       <div id="feedback-2" class="feedback hidden"></div>
       <div class="kana-picker">
@@ -109,6 +131,7 @@ export function renderRomajiToKana(question, scriptData, scoreboard, composition
 
 export function renderNihongoToRomaji(question, scoreboard) {
   const container = document.getElementById('quiz-3-container');
+  const fontSize = getKanaFontSize(question.kana);
   container.innerHTML = `
     <div class="scoreboard">
       <span>Tier: ${scoreboard.tier}</span>
@@ -118,7 +141,7 @@ export function renderNihongoToRomaji(question, scoreboard) {
       <span>✗ ${scoreboard.wrong}</span>
     </div>
     <div class="quiz-card">
-      <div class="large-kana">${question.kana}</div>
+      <div class="large-kana" style="font-size: ${fontSize}">${question.kana}</div>
       <input type="text" id="romaji-input" placeholder="Type romaji..." autocomplete="off" autofocus>
       <div class="nav-buttons" style="width: 100%; gap: 0.5rem;">
           <button class="btn-primary" id="submit-answer" style="flex: 1;">Submit</button>

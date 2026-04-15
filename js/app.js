@@ -140,7 +140,7 @@ function handleAnswerSubmit() {
       // Or if it's a single character answer in Mode 2 (which is less likely for words)
     } else if (currentMode === 1 || currentMode === 3) {
       // For transcription modes, advance after a delay
-      setTimeout(nextQuestion, 1000);
+      setTimeout(nextQuestion, 3000);
     }
     // For Mode 2 (Romaji->Kana, single character), it's handled by handlePickerAnswer
     // If Mode 2 + words, composition handles advancement.
@@ -164,7 +164,7 @@ function handleReveal() {
     translation: (currentMode === 2 && isWordMode) ? q.kana : null 
   };
   ui.renderFeedback(result, feedbackId, true);
-  setTimeout(nextQuestion, 2000);
+  setTimeout(nextQuestion, 3000);
 }
 
 function handlePickerAnswer(kana) {
@@ -176,7 +176,7 @@ function handlePickerAnswer(kana) {
   if (result.correct) {
     if (result.complete) { // Full word composition complete
       ui.renderFeedback(result, feedbackId, true); // Show translation and mark correct
-      setTimeout(nextQuestion, result.tierUnlocked ? 2500 : 1500); // Longer delay if tier unlocked
+      setTimeout(nextQuestion, result.tierUnlocked ? 4000 : 3500); // Longer delay if tier unlocked
     } else { // Partial composition
       ui.renderFeedback(result, feedbackId, false); // Show partial correct feedback
       // Update UI with current composition
