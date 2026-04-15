@@ -1,6 +1,7 @@
 export class Quiz {
-  constructor(scriptData) {
+  constructor(scriptData, isWordMode = false) {
     this.data = scriptData;
+    this.isWordMode = isWordMode;
     this.currentTier = parseInt(localStorage.getItem('tierProgress')) || 1;
     this.score = 0;
     this.streak = 0;
@@ -8,6 +9,7 @@ export class Quiz {
     this.totalCorrect = 0;
     this.totalWrong = 0;
     this.currentQuestion = null;
+    this.composition = [];
   }
 
   generateQuestion() {
@@ -23,27 +25,83 @@ export class Quiz {
     } while (availablePool.length > 1 && lastQuestion && newQuestion.kana === lastQuestion.kana);
 
     this.currentQuestion = newQuestion;
+    this.composition = [];
     return this.currentQuestion;
   }
 
-  checkAnswer(input) {
-    // Mode 1: input is romaji string
-    // Mode 2: input is kana character
-    const isCorrect = (input.toLowerCase().trim() === this.currentQuestion.romaji.toLowerCase()) ||
-                      (input === this.currentQuestion.kana);
+  checkAnswer(input, mode) {
+    const q = this.currentQuestion;
+    
+    // Mode 2 (Romaji -> Kana) with Words requires composition
+    if (mode === 2 && this.isWordMode) {
+      const targetKana = q.kana;
+      const currentBuilt = this.composition.join('');
+      const remaining = targetKana.substring(currentBuilt.length);
+      
+      if (remaining.startsWith(input)) {
+        this.composition.push(input);
+        const isComplete = this.composition.join('') === targetKana;
+        
+        if (isComplete) {
+          const points = q.kana.length > 1 ? q.kana.length : 1;
+          this.score += points * this.currentTier;
+          this.streak++;
+          this.consecutiveCorrect++;
+          this.totalCorrect++;
+          const unlocked = this.checkTierUnlock();
+          return { 
+            correct: true, 
+            complete: true,
+            correctAnswer: q.phonetic || (Array.isArray(q.romaji) ? q.romaji[0] : q.romaji), 
+            kanaAnswer: q.kana, 
+            translation: q.phonetic ? q.romaji : null,
+            tierUnlocked: unlocked 
+          };
+        } else {
+          return { correct: true, complete: false };
+        }
+      } else {
+        this.streak = 0;
+        this.consecutiveCorrect = 0;
+        this.totalWrong++;
+        return { correct: false, complete: false, correctAnswer: q.phonetic || (Array.isArray(q.romaji) ? q.romaji[0] : q.romaji), kanaAnswer: q.kana };
+      }
+    }
+
+    // Standard single-answer logic (Mode 1, Mode 3, or Mode 2 without words)
+    const answerKey = q.phonetic || q.romaji;
+    let isCorrect = false;
+
+    if (Array.isArray(answerKey)) {
+      isCorrect = answerKey.some(t => t.toLowerCase().trim() === input.toLowerCase().trim());
+    } else {
+      isCorrect = (input.toLowerCase().trim() === answerKey.toLowerCase().trim()) ||
+                  (input === q.kana);
+    }
     
     if (isCorrect) {
-      this.score += 1 * this.currentTier;
+      const points = q.kana.length > 1 ? q.kana.length : 1;
+      this.score += points * this.currentTier;
       this.streak++;
       this.consecutiveCorrect++;
       this.totalCorrect++;
       const unlocked = this.checkTierUnlock();
-      return { correct: true, correctAnswer: this.currentQuestion.romaji, kanaAnswer: this.currentQuestion.kana, tierUnlocked: unlocked };
+      return { 
+        correct: true, 
+        correctAnswer: q.phonetic || (Array.isArray(q.romaji) ? q.romaji[0] : q.romaji), 
+        kanaAnswer: q.kana, 
+        translation: q.phonetic ? q.romaji : null,
+        tierUnlocked: unlocked 
+      };
     } else {
       this.streak = 0;
       this.consecutiveCorrect = 0;
       this.totalWrong++;
-      return { correct: false, correctAnswer: this.currentQuestion.romaji, kanaAnswer: this.currentQuestion.kana };
+      return { 
+        correct: false, 
+        correctAnswer: q.phonetic || (Array.isArray(q.romaji) ? q.romaji[0] : q.romaji), 
+        kanaAnswer: q.kana 
+      };
     }
   }
 

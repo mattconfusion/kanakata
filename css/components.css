@@ -58,6 +58,17 @@ header {
   line-height: 1;
 }
 
+.composition-display {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.5rem;
+  color: var(--accent-color);
+  min-height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .romaji-label {
   font-size: clamp(2rem, 10vw, 4rem);
   font-weight: 600;
@@ -67,13 +78,17 @@ header {
 
 .scoreboard {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
   width: 100%;
   font-weight: 600;
   color: var(--text-secondary);
-  gap: 0.25rem;
+  gap: 1rem;
   flex-shrink: 0;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05rem;
 }
 
 /* Grid for Mode 2 (Romaji -> Kana) */
@@ -220,4 +235,39 @@ header {
   font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
   margin-right: 0.25rem;
+}
+
+/* Notifications */
+.notification-container {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    pointer-events: none;
+}
+
+.notification {
+    background-color: var(--surface-color);
+    color: var(--text-primary);
+    padding: 0.75rem 1.5rem;
+    border-radius: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--border-color);
+    font-size: 0.9rem;
+    font-weight: 600;
+    opacity: 0;
+    transform: translateY(1rem);
+    transition: all 0.3s ease;
+    pointer-events: auto;
+    text-align: center;
+    min-width: 200px;
+}
+
+.notification.show {
+    opacity: 1;
+    transform: translateY(0);
 }

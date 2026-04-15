@@ -48,17 +48,18 @@
             <!-- Script Selection -->
             <section id="screen-script-select" class="screen">
                 <h1>Select Script</h1>
-                <div class="quiz-card">
-                    <button class="btn-primary" data-script="hiragana">Hiragana (ひらがな)</button>
-                    <button class="btn-primary" data-script="katakana">Katakana (カタカナ)</button>
-                    <button id="reset-tier" class="btn-outline" style="margin-top: 1rem; width: 100%; border-color: var(--error-color); color: var(--error-color);">Reset Progress (Tier 1)</button>
+                <div class="quiz-card" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <button class="btn-primary" data-script="hiragana">Hiragana</button>
+                    <button class="btn-primary" data-script="katakana">Katakana</button>
+                    <button class="btn-primary" data-script="hiragana" data-words="true">Hiragana Words</button>
+                    <button class="btn-primary" data-script="katakana" data-words="true">Katakana Words</button>
+                    <button id="reset-tier" class="btn-outline" style="grid-column: span 2; margin-top: 1rem; width: 100%; border-color: var(--error-color); color: var(--error-color);">Reset Progress (Tier 1)</button>
                 </div>
             </section>
 
 
             <!-- Mode 1 Quiz -->
             <section id="screen-quiz-mode-1" class="screen">
-                <h1>Kana → Romaji</h1>
                 <div id="quiz-1-container" style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
                     <!-- Rendered by ui.js -->
                 </div>
@@ -66,8 +67,14 @@
 
             <!-- Mode 2 Quiz -->
             <section id="screen-quiz-mode-2" class="screen">
-                <h1>Romaji → Kana</h1>
                 <div id="quiz-2-container" style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
+                    <!-- Rendered by ui.js -->
+                </div>
+            </section>
+
+            <!-- Mode 3 Quiz -->
+            <section id="screen-quiz-mode-3" class="screen">
+                <div id="quiz-3-container" style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
                     <!-- Rendered by ui.js -->
                 </div>
             </section>
@@ -84,6 +91,8 @@
             </div>
         </div>
     </div>
+
+    <div id="notification-container" class="notification-container"></div>
 
     <script type="module" src="js/app.js"></script>
 </body>
