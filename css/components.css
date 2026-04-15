@@ -59,7 +59,7 @@ header.header-hidden {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1rem;
   max-height: 80vh; /* Limit card height to viewport */
 }
 
@@ -78,7 +78,7 @@ header.header-hidden {
   font-weight: 700;
   letter-spacing: 0.5rem;
   color: var(--accent-color);
-  min-height: 3rem;
+  min-height: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -196,23 +196,52 @@ header.header-hidden {
 .ref-item .kana { font-size: 1.25rem; font-weight: 700; }
 .ref-item .romaji { font-size: 0.875rem; color: var(--text-secondary); }
 
-/* Feedback states */
-.feedback {
-  padding: 1rem;
-  border-radius: 8px;
-  text-align: center;
-  font-weight: 600;
-  width: 100%;
+/* Notifications */
+.notification-container {
+    position: fixed;
+    top: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    pointer-events: none;
+    width: 90%;
+    max-width: 400px;
 }
 
-.feedback.correct {
-  background-color: rgba(40, 167, 69, 0.2);
-  color: var(--success-color);
+.notification {
+    background-color: var(--surface-color);
+    color: var(--text-primary);
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
+    font-size: 1rem;
+    font-weight: 600;
+    opacity: 0;
+    transform: translateY(-2rem);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    pointer-events: auto;
+    text-align: center;
 }
 
-.feedback.wrong {
-  background-color: rgba(220, 53, 69, 0.2);
-  color: var(--error-color);
+.notification.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.notification.correct {
+    background-color: var(--success-color);
+    color: white;
+    border-color: var(--success-color);
+}
+
+.notification.wrong {
+    background-color: var(--error-color);
+    color: white;
+    border-color: var(--error-color);
 }
 
 /* Dictionary Style */
@@ -259,37 +288,3 @@ header.header-hidden {
   margin-right: 0.25rem;
 }
 
-/* Notifications */
-.notification-container {
-    position: fixed;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 2000;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    pointer-events: none;
-}
-
-.notification {
-    background-color: var(--surface-color);
-    color: var(--text-primary);
-    padding: 0.75rem 1.5rem;
-    border-radius: 2rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    border: 1px solid var(--border-color);
-    font-size: 0.9rem;
-    font-weight: 600;
-    opacity: 0;
-    transform: translateY(1rem);
-    transition: all 0.3s ease;
-    pointer-events: auto;
-    text-align: center;
-    min-width: 200px;
-}
-
-.notification.show {
-    opacity: 1;
-    transform: translateY(0);
-}

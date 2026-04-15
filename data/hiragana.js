@@ -31,6 +31,15 @@ export const hiragana = [
   { kana: "わ", romaji: "wa", tier: 2 }, { kana: "を", romaji: "wo", tier: 2 },
   { kana: "ん", romaji: "n", tier: 2 },
 
+  // Special kana for words
+  { kana: "っ", romaji: "small tsu", tier: 2 },
+  { kana: "ー", romaji: "long vowel", tier: 2 },
+  { kana: "ぁ", romaji: "small a", tier: 2 },
+  { kana: "ぃ", romaji: "small i", tier: 2 },
+  { kana: "ぅ", romaji: "small u", tier: 2 },
+  { kana: "ぇ", romaji: "small e", tier: 2 },
+  { kana: "ぉ", romaji: "small o", tier: 2 },
+
   // Tier 3: Dakuten variants
   { kana: "が", romaji: "ga", tier: 3 }, { kana: "ぎ", romaji: "gi", tier: 3 },
   { kana: "ぐ", romaji: "gu", tier: 3 }, { kana: "げ", romaji: "ge", tier: 3 },

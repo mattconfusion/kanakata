@@ -193,27 +193,23 @@ function handleReveal() {
 function handlePickerAnswer(kana) {
   const result = currentQuiz.checkAnswer(kana, currentMode);
   
-  // Determine the correct feedback element ID
-  const feedbackId = (currentMode === 1 || currentMode === 3) ? 'feedback-1' : 'feedback-2';
+  // Update UI with current composition first
+  const data = currentScript === 'katakana' ? katakana : hiragana;
+  ui.renderRomajiToKana(currentQuiz.currentQuestion, data, {
+      tier: currentQuiz.currentTier,
+      streak: currentQuiz.streak,
+      score: currentQuiz.score,
+      correct: currentQuiz.totalCorrect,
+      wrong: currentQuiz.totalWrong
+  }, currentQuiz.composition);
 
   if (result.correct) {
     if (result.complete) { // Full word composition complete
-      ui.renderFeedback(result, feedbackId, true); // Show translation and mark correct
+      ui.renderFeedback(result, null, true); // Show translation and mark correct
       setTimeout(nextQuestion, result.tierUnlocked ? 4000 : 3500); // Longer delay if tier unlocked
-    } else { // Partial composition
-      ui.renderFeedback(result, feedbackId, false); // Show partial correct feedback
-      // Update UI with current composition
-      const data = currentScript === 'katakana' ? katakana : hiragana;
-      ui.renderRomajiToKana(currentQuiz.currentQuestion, data, {
-          tier: currentQuiz.currentTier,
-          streak: currentQuiz.streak,
-          score: currentQuiz.score,
-          correct: currentQuiz.totalCorrect,
-          wrong: currentQuiz.totalWrong
-      }, currentQuiz.composition);
     }
   } else { // Incorrect answer
-    ui.renderFeedback(result, feedbackId, true); // Show correct answer in feedback
+    ui.renderFeedback(result, null, true); // Show correct answer in feedback
     // Disable picker while showing feedback
     document.querySelectorAll('.picker-item').forEach(btn => btn.disabled = true);
     setTimeout(() => {

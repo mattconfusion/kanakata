@@ -18,10 +18,10 @@ export function switchScreen(screenId) {
   if (target) target.classList.add('active');
 }
 
-export function showNotification(message, duration = 3000) {
+export function showNotification(message, duration = 3000, type = '') {
   const container = document.getElementById('notification-container');
   const notification = document.createElement('div');
-  notification.className = 'notification';
+  notification.className = `notification ${type}`;
   notification.textContent = message;
   
   container.appendChild(notification);
@@ -37,7 +37,7 @@ export function showNotification(message, duration = 3000) {
       if (container.contains(notification)) {
         container.removeChild(notification);
       }
-    }, 300);
+    }, 400);
   }, duration);
 }
 
@@ -68,7 +68,6 @@ export function renderKanaToRomaji(question, scoreboard) {
           <button class="btn-primary" id="submit-answer" style="flex: 1;">Submit</button>
           <button class="btn-outline hidden" id="reveal-btn" style="flex: 1;">Reveal</button>
       </div>
-      <div id="feedback-1" class="feedback hidden"></div>
     </div>
   `;
   
@@ -100,12 +99,8 @@ export function renderRomajiToKana(question, scriptData, scoreboard, composition
   const container = document.getElementById('quiz-2-container');
   const unlockedKana = scriptData.filter(item => item.tier <= scoreboard.tier);
 
-  // For words, we show placeholders for characters
-  let compositionDisplay = '';
-  if (composition.length > 0 || (question.kana.length > 1 && !composition.length)) {
-    // Simple logic to show built string so far
-    compositionDisplay = `<div class="composition-display">${composition.join('')}</div>`;
-  }
+  // Always show composition if there is any, even if just finished
+  const compositionDisplay = `<div class="composition-display">${composition.join('')}</div>`;
 
   const romajiText = question.phonetic || question.romaji;
   const fontSize = getRomajiFontSize(romajiText);
@@ -121,7 +116,6 @@ export function renderRomajiToKana(question, scriptData, scoreboard, composition
     <div class="quiz-card">
       <div class="romaji-label" style="font-size: ${fontSize}">${romajiText}</div>
       ${compositionDisplay}
-      <div id="feedback-2" class="feedback hidden"></div>
       <div class="kana-picker">
         ${unlockedKana.map(item => `<button class="picker-item" data-kana="${item.kana}">${item.kana}</button>`).join('')}
       </div>
@@ -147,7 +141,6 @@ export function renderNihongoToRomaji(question, scoreboard) {
           <button class="btn-primary" id="submit-answer" style="flex: 1;">Submit</button>
           <button class="btn-outline hidden" id="reveal-btn" style="flex: 1;">Reveal</button>
       </div>
-      <div id="feedback-3" class="feedback hidden"></div>
     </div>
   `;
   const input = document.getElementById('romaji-input');
@@ -161,9 +154,6 @@ export function renderNihongoToRomaji(question, scoreboard) {
 }
 
 export function renderFeedback(result, feedbackId, showAnswer = false) {
-  const feedbackEl = document.getElementById(feedbackId);
-  feedbackEl.classList.remove('hidden', 'correct', 'wrong');
-  
   if (result.correct) {
     let message = 'Correct! ✓';
     if (result.translation) {
@@ -173,13 +163,12 @@ export function renderFeedback(result, feedbackId, showAnswer = false) {
     if (result.tierUnlocked) {
       message += ' — New Tier Unlocked! 🎉';
     }
-    feedbackEl.textContent = message;
-    feedbackEl.classList.add('correct');
+    showNotification(message, 2500, 'correct');
   } else {
-    feedbackEl.textContent = showAnswer 
+    const message = showAnswer 
       ? `Wrong ✗ (Correct was: ${result.correctAnswer} / ${result.kanaAnswer})`
       : 'Wrong ✗ — Try again!';
-    feedbackEl.classList.add('wrong');
+    showNotification(message, 3000, 'wrong');
   }
 }
 

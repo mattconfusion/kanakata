@@ -31,6 +31,15 @@ export const katakana = [
   { kana: "ワ", romaji: "wa", tier: 2 }, { kana: "ヲ", romaji: "wo", tier: 2 },
   { kana: "ン", romaji: "n", tier: 2 },
 
+  // Special kana for words
+  { kana: "ッ", romaji: "small tsu", tier: 2 },
+  { kana: "ー", romaji: "long vowel", tier: 2 },
+  { kana: "ァ", romaji: "small a", tier: 2 },
+  { kana: "ィ", romaji: "small i", tier: 2 },
+  { kana: "ゥ", romaji: "small u", tier: 2 },
+  { kana: "ェ", romaji: "small e", tier: 2 },
+  { kana: "ォ", romaji: "small o", tier: 2 },
+
   // Tier 3: Dakuten variants
   { kana: "ガ", romaji: "ga", tier: 3 }, { kana: "ギ", romaji: "gi", tier: 3 },
   { kana: "グ", romaji: "gu", tier: 3 }, { kana: "ゲ", romaji: "ge", tier: 3 },
@@ -45,7 +54,7 @@ export const katakana = [
   { kana: "ブ", romaji: "bu", tier: 3 }, { kana: "ベ", romaji: "be", tier: 3 },
   { kana: "ボ", romaji: "bo", tier: 3 },
   { kana: "パ", romaji: "pa", tier: 3 }, { kana: "ピ", romaji: "pi", tier: 3 },
-  { kana: "ぷ", romaji: "pu", tier: 3 }, { kana: "ペ", romaji: "pe", tier: 3 },
+  { kana: "プ", romaji: "pu", tier: 3 }, { kana: "ペ", romaji: "pe", tier: 3 },
   { kana: "ポ", romaji: "po", tier: 3 },
 
   // Tier 4: Combination kana
