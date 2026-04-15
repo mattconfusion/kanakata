@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KanaKata — Master Hiragana & Katakana</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/theme.css">
+
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+    <div id="app">
+        <header>
+            <div class="logo"><strong>かなカタ・KanaKata</strong></div>
+            <div class="nav-buttons">
+                <button id="toggle-theme" class="btn-icon" title="Toggle Theme">🌓</button>
+                <button id="show-reference" class="btn-icon" title="Reference Table">📖</button>
+                <button id="go-home" class="btn-icon" title="Go Home">🏠</button>
+            </div>
+        </header>
+
+        <main>
+            <!-- Home Screen -->
+            <section id="screen-home" class="screen active">
+                <div class="dictionary-section" style="margin-top: 0; border-top: none; border-bottom: 1px solid var(--border-color); margin-bottom: 1rem;">
+                    <div class="dict-entry">
+                        <p class="headword">Ka·na <span class="pronunciation">/ˈkɑːnə/</span></p>
+                        <p class="definition"><em>n.</em> The system of Japanese syllabic writing, including both hiragana and katakana, used to represent sounds phonetically.</p>
+                    </div>
+                    <div class="dict-entry">
+                        <p class="headword">Ka·ta <span class="pronunciation">/ˈkɑːtə/</span></p>
+                        <p class="definition"><em>n.</em> <strong>1.</strong> A Japanese word (型) meaning “form,” “shape,” or “pattern,” referring to the precise strokes and structures of the characters. <strong>2.</strong> A structured system of training or a choreographed pattern of movements used to achieve mastery through deliberate, repetitive practice.</p>
+                    </div>
+                </div>
+
+                <h1>Choose Mode</h1>
+                <div class="quiz-card">
+                    <button class="btn-primary" data-mode="1">Kana → Romaji</button>
+                    <button class="btn-primary" data-mode="2">Romaji → Kana</button>
+                </div>
+            </section>
+
+
+            <!-- Script Selection -->
+            <section id="screen-script-select" class="screen">
+                <h1>Select Script</h1>
+                <div class="quiz-card">
+                    <button class="btn-primary" data-script="hiragana">Hiragana (ひらがな)</button>
+                    <button class="btn-primary" data-script="katakana">Katakana (カタカナ)</button>
+                    <button id="reset-tier" class="btn-outline" style="margin-top: 1rem; width: 100%; border-color: var(--error-color); color: var(--error-color);">Reset Progress (Tier 1)</button>
+                </div>
+            </section>
+
+
+            <!-- Mode 1 Quiz -->
+            <section id="screen-quiz-mode-1" class="screen">
+                <h1>Kana → Romaji</h1>
+                <div id="quiz-1-container" style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
+                    <!-- Rendered by ui.js -->
+                </div>
+            </section>
+
+            <!-- Mode 2 Quiz -->
+            <section id="screen-quiz-mode-2" class="screen">
+                <h1>Romaji → Kana</h1>
+                <div id="quiz-2-container" style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
+                    <!-- Rendered by ui.js -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Overlay / Reference Table -->
+    <div id="overlay" class="overlay">
+        <div class="overlay-content">
+            <button id="close-overlay" class="btn-icon close-overlay">✕</button>
+            <h2 id="ref-title">Hiragana Reference</h2>
+            <div class="ref-grid" id="ref-grid">
+                <!-- Rendered by ui.js -->
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,223 @@
+/* Header & Navigation */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  margin-bottom: 2rem;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Common Buttons */
+.btn-primary {
+  background-color: var(--accent-color);
+  color: white;
+  padding: 0.75rem 1.5rem;
+}
+
+.btn-outline {
+  background-color: transparent;
+  border: 2px solid var(--accent-color);
+  color: var(--accent-color);
+  padding: 0.75rem 1.5rem;
+}
+
+.btn-icon {
+  background-color: var(--surface-color);
+  color: var(--text-primary);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-color);
+}
+
+/* Quiz UI Components */
+.quiz-card {
+  background-color: var(--surface-color);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: var(--shadow);
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  max-height: 80vh; /* Limit card height to viewport */
+}
+
+.large-kana {
+  font-size: clamp(4rem, 20vw, 8rem);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.romaji-label {
+  font-size: clamp(2rem, 10vw, 4rem);
+  font-weight: 600;
+  color: var(--accent-color);
+  flex-shrink: 0; /* Don't shrink the label */
+}
+
+.scoreboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  font-weight: 600;
+  color: var(--text-secondary);
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+/* Grid for Mode 2 (Romaji -> Kana) */
+.kana-picker {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+  gap: 0.5rem;
+  width: 100%;
+  flex: 1; /* Take remaining space */
+  overflow-y: auto;
+  padding: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.picker-item {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  background-color: var(--surface-color);
+  color: var(--accent-color);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+}
+
+.picker-item:hover {
+  background-color: var(--accent-color);
+  color: white;
+  border-color: var(--accent-color);
+}
+
+/* Overlay / Reference Table */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: none;
+  z-index: 1000;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.overlay.active {
+  display: block;
+}
+
+.overlay-content {
+  background-color: var(--surface-color);
+  padding: 2rem;
+  border-radius: 16px;
+  max-width: 1000px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.close-overlay {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+.ref-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.5rem;
+}
+
+.ref-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+}
+
+.ref-item .kana { font-size: 1.25rem; font-weight: 700; }
+.ref-item .romaji { font-size: 0.875rem; color: var(--text-secondary); }
+
+/* Feedback states */
+.feedback {
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 600;
+  width: 100%;
+}
+
+.feedback.correct {
+  background-color: rgba(40, 167, 69, 0.2);
+  color: var(--success-color);
+}
+
+.feedback.wrong {
+  background-color: rgba(220, 53, 69, 0.2);
+  color: var(--error-color);
+}
+
+/* Dictionary Style */
+.dictionary-section {
+  max-width: 600px;
+  width: 100%;
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.dict-entry {
+  text-align: left;
+}
+
+.headword {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.pronunciation {
+  font-weight: 400;
+  color: var(--text-secondary);
+  font-style: normal;
+  font-size: 1rem;
+  margin-left: 0.5rem;
+}
+
+.definition {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  color: var(--text-primary);
+}
+
+.definition em {
+  color: var(--text-secondary);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  margin-right: 0.25rem;
+}
