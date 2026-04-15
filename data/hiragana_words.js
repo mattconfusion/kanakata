@@ -449,7 +449,7 @@ export const hiragana_words = [
   {
     "kana": "てーぶる",
     "romaji": "table",
-    "phonetic": "teーburu",
+    "phonetic": "teeburu",
     "tier": 3
   },
   {
@@ -1067,7 +1067,7 @@ export const hiragana_words = [
   {
     "kana": "ちーず",
     "romaji": "cheese",
-    "phonetic": "chiーzu",
+    "phonetic": "chiizu",
     "tier": 2
   },
   {
@@ -1097,7 +1097,7 @@ export const hiragana_words = [
   {
     "kana": "こーひー",
     "romaji": "coffee",
-    "phonetic": "koーhiー",
+    "phonetic": "koohii",
     "tier": 3
   },
   {
@@ -1109,7 +1109,7 @@ export const hiragana_words = [
   {
     "kana": "じゅーす",
     "romaji": "juice",
-    "phonetic": "juーsu",
+    "phonetic": "juusu",
     "tier": 3
   },
   {
@@ -1148,7 +1148,7 @@ export const hiragana_words = [
   {
     "kana": "らーめん",
     "romaji": "ramen",
-    "phonetic": "raーmen",
+    "phonetic": "raamen",
     "tier": 3
   },
   {
@@ -2894,7 +2894,7 @@ export const hiragana_words = [
   {
     "kana": "めーるあどれす",
     "romaji": "email address",
-    "phonetic": "meーruadoresu",
+    "phonetic": "meeruadoresu",
     "tier": 4
   },
   {
@@ -4196,7 +4196,7 @@ export const hiragana_words = [
   {
     "kana": "かーなび",
     "romaji": "car navigation",
-    "phonetic": "kaーnabi",
+    "phonetic": "kaanabi",
     "tier": 3
   },
   {
@@ -6169,7 +6169,7 @@ export const hiragana_words = [
       "um",
       "let me see"
     ],
-    "phonetic": "eーto",
+    "phonetic": "eeto",
     "tier": 2
   },
   {
@@ -6178,7 +6178,7 @@ export const hiragana_words = [
       "um",
       "excuse me"
     ],
-    "phonetic": "anoー",
+    "phonetic": "anoo",
     "tier": 2
   },
   {
