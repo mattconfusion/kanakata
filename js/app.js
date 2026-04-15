@@ -40,7 +40,30 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Global Navigation
+// --- Global Navigation ---
+  let lastScrollY = window.scrollY;
+  const header = document.querySelector('header');
+
+  window.addEventListener('scroll', () => {
+    const isQuizActive = ['screen-quiz-mode-1', 'screen-quiz-mode-2', 'screen-quiz-mode-3'].some(id => 
+      document.getElementById(id).classList.contains('active')
+    );
+
+    if (isQuizActive) {
+      if (window.scrollY > lastScrollY && window.scrollY > 50) {
+        // Scrolling down
+        header.classList.add('header-hidden');
+      } else {
+        // Scrolling up
+        header.classList.remove('header-hidden');
+      }
+    } else {
+      // Ensure header is visible on non-quiz screens
+      header.classList.remove('header-hidden');
+    }
+    lastScrollY = window.scrollY;
+  });
+
   document.getElementById('toggle-theme').addEventListener('click', toggleTheme);
   document.getElementById('go-home').addEventListener('click', () => ui.switchScreen('home'));
   
