@@ -90,7 +90,7 @@ header.header-hidden {
 .romaji-label {
   font-size: clamp(2rem, 10vw, 4rem);
   font-weight: 600;
-  color: var(--accent-color);
+  color: var(--text-primary);
   flex-shrink: 0;
   white-space: nowrap;
   max-width: 100%;

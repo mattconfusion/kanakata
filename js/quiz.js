@@ -88,6 +88,7 @@ export class Quiz {
       const unlocked = this.checkTierUnlock();
       return { 
         correct: true, 
+        complete: true,
         correctAnswer: q.phonetic || (Array.isArray(q.romaji) ? q.romaji[0] : q.romaji), 
         kanaAnswer: q.kana, 
         translation: q.phonetic ? q.romaji : null,
