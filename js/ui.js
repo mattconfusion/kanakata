@@ -4,6 +4,7 @@ export const screens = {
   quizMode1: () => document.getElementById('screen-quiz-mode-1'),
   quizMode2: () => document.getElementById('screen-quiz-mode-2'),
   quizMode3: () => document.getElementById('screen-quiz-mode-3'),
+  incremental: () => document.getElementById('screen-incremental'),
   overlay: () => document.getElementById('overlay')
 };
 

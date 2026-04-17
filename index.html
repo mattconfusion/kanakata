@@ -58,7 +58,17 @@
                     <button class="btn-primary" data-script="katakana">Katakana</button>
                     <button class="btn-primary" data-script="hiragana" data-words="true">Hiragana Words</button>
                     <button class="btn-primary" data-script="katakana" data-words="true">Katakana Words</button>
-                    <button id="reset-tier" class="btn-outline" style="grid-column: span 2; margin-top: 1rem; width: 100%; border-color: var(--error-color); color: var(--error-color);">Reset Progress (Tier 1)</button>
+                    <button class="btn-primary" data-script="hiragana" data-incremental="true">Hiragana Incremental</button>
+                    <button class="btn-primary" data-script="katakana" data-incremental="true">Katakana Incremental</button>
+                    <div style="grid-column: span 2; display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem;">
+                        <span style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05rem; text-align: center;">Start from tier</span>
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem;">
+                            <button class="btn-outline tier-btn" data-tier="1">Tier 1</button>
+                            <button class="btn-outline tier-btn" data-tier="2">Tier 2</button>
+                            <button class="btn-outline tier-btn" data-tier="3">Tier 3</button>
+                            <button class="btn-outline tier-btn" data-tier="4">Tier 4</button>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -81,6 +91,13 @@
             <section id="screen-quiz-mode-3" class="screen">
                 <div id="quiz-3-container" style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
                     <!-- Rendered by ui.js -->
+                </div>
+            </section>
+
+            <!-- Incremental Learning -->
+            <section id="screen-incremental" class="screen">
+                <div id="incremental-container" style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
+                    <!-- Rendered by ui_incremental.js -->
                 </div>
             </section>
         </main>
