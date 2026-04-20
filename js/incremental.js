@@ -37,10 +37,11 @@ export function resetPhaseProgress(script, direction) {
   saveProgress(script, direction, createInitialProgress());
 }
 
-export function getUnlockedSymbols(progress, phases) {
+export function getUnlockedSymbols(progress, phases, maxPhaseId = null) {
   const unlocked = [];
+  const limit = maxPhaseId !== null ? maxPhaseId : progress.currentPhase;
   for (const phase of phases) {
-    if (phase.id <= progress.currentPhase) {
+    if (phase.id <= limit) {
       unlocked.push(...phase.symbols);
     }
   }

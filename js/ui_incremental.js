@@ -64,14 +64,16 @@ export function renderIntroCard(phase, isReview = false) {
     </p>
     <div class="intro-symbols-grid">${symbolCards}</div>
     <button class="btn-primary" id="inc-start-drill" style="width: 100%; max-width: 500px; margin-top: 1rem;">${btnLabel}</button>
+    ${phase.id > 1 ? `<button class="btn-outline" id="inc-start-mixed-review" style="width: 100%; max-width: 500px; margin-top: 0.5rem;">Mixed Review (Phases 1-${phase.id})</button>` : ''}
     <button class="btn-outline" data-inc-back="map" style="margin-top: 0.5rem;">← Back to Map</button>
   `;
 }
 
 function stageHeader(progress, isReview) {
   if (isReview) {
+    const label = progress.stage === 'mixed' ? 'Mixed Review' : 'Review';
     return `<div class="stage-indicator">
-      <span class="stage-badge" style="background-color: var(--text-secondary);">Review</span>
+      <span class="stage-badge" style="background-color: var(--text-secondary);">${label}</span>
     </div>`;
   }
   if (progress.stage === 'drill') {

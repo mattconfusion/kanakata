@@ -25,6 +25,7 @@ const incState = {
   currentQuestion: null,
   lastKana: null,
   isReview: false,
+  isMixedReview: false,
   reviewPhase: null,
 };
 
@@ -96,19 +97,16 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   document.getElementById('show-reference').addEventListener('click', () => {
-    let data;
-    if (incState.active) {
-      data = incState.script === 'katakana' ? katakana : hiragana;
-      document.getElementById('ref-title').textContent = `${incState.script === 'katakana' ? 'Katakana' : 'Hiragana'} Reference`;
-    } else if (currentMode === 3) {
-      data = currentScript === 'katakana' ? katakana_words : hiragana_words;
-      document.getElementById('ref-title').textContent = `${currentScript === 'katakana' ? 'Katakana' : 'Hiragana'} Reference`;
-    } else {
-      data = currentScript === 'katakana' ? katakana : hiragana;
-      document.getElementById('ref-title').textContent = `${currentScript === 'katakana' ? 'Katakana' : 'Hiragana'} Reference`;
-    }
-    ui.renderReferenceTable(data);
+    const scriptToOpen = incState.active ? incState.script : currentScript;
+    openReference(scriptToOpen);
     ui.screens.overlay().classList.add('active');
+  });
+
+  document.querySelectorAll('.ref-switch').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const script = e.target.dataset.refScript;
+      openReference(script);
+    });
   });
 
   document.getElementById('close-overlay').addEventListener('click', () => {
@@ -128,6 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.target.id === 'inc-submit') handleIncSubmit();
     if (e.target.classList.contains('inc-picker-item')) handleIncPicker(e.target.dataset.incKana);
     if (e.target.id === 'inc-start-drill') startIncDrill();
+    if (e.target.id === 'inc-start-mixed-review') startIncMixedReview();
     if (e.target.id === 'inc-next-phase') showIncPhaseMap();
 
     // Incremental navigation
@@ -268,6 +267,7 @@ function startIncrementalModeForScript(script, direction) {
 
 function showIncPhaseMap() {
   incState.isReview = false;
+  incState.isMixedReview = false;
   uiInc.renderPhaseMap(incState.phases, incState.progress);
 }
 
@@ -278,6 +278,7 @@ function openIncPhase(phaseId) {
   const isActivePhase = phaseId === incState.progress.currentPhase &&
     !incState.progress.completedPhases.includes(phaseId);
 
+  incState.isMixedReview = false;
   if (isActivePhase) {
     incState.isReview = false;
     if (incState.progress.stage === 'intro') {
@@ -304,9 +305,22 @@ function startIncDrill() {
   incNextQuestion();
 }
 
+function startIncMixedReview() {
+  incState.isReview = true;
+  incState.isMixedReview = true;
+  incState.lastKana = null;
+  incNextQuestion();
+}
+
 function incNextQuestion() {
   if (incState.isReview) {
-    const q = inc.generateDrillQuestion(incState.reviewPhase, incState.progress.symbolStats, incState.lastKana);
+    let q;
+    if (incState.isMixedReview) {
+      const unlocked = inc.getUnlockedSymbols(incState.progress, incState.phases, incState.reviewPhase.id);
+      q = inc.generateMixedQuestion(unlocked, incState.progress.symbolStats, incState.lastKana);
+    } else {
+      q = inc.generateDrillQuestion(incState.reviewPhase, incState.progress.symbolStats, incState.lastKana);
+    }
     incState.currentQuestion = q;
     incState.lastKana = q.kana;
     renderIncQuiz(q);
@@ -330,7 +344,12 @@ function incNextQuestion() {
 
 function renderIncQuiz(question) {
   const fakeProgress = incState.isReview
-    ? { stage: 'review', drillCorrect: 0, mixedAnswers: 0, mixedCorrect: 0 }
+    ? {
+        stage: incState.isMixedReview ? 'mixed' : 'review',
+        drillCorrect: 0,
+        mixedAnswers: 0,
+        mixedCorrect: 0
+      }
     : incState.progress;
 
   if (incState.direction === 'kanaToRomaji') {
@@ -338,7 +357,11 @@ function renderIncQuiz(question) {
   } else {
     let pickerSymbols;
     if (incState.isReview) {
-      pickerSymbols = incState.reviewPhase.symbols;
+      if (incState.isMixedReview) {
+        pickerSymbols = inc.getUnlockedSymbols(incState.progress, incState.phases, incState.reviewPhase.id);
+      } else {
+        pickerSymbols = incState.reviewPhase.symbols;
+      }
     } else if (incState.progress.stage === 'drill') {
       pickerSymbols = incState.phases.find(p => p.id === incState.progress.currentPhase).symbols;
     } else {
@@ -429,4 +452,25 @@ function handleIncBack(target) {
     incState.active = false;
     ui.switchScreen('scriptSelect');
   }
+}
+
+function openReference(script) {
+  let data;
+  const isWords = !incState.active && isWordMode;
+  
+  if (isWords) {
+    data = script === 'katakana' ? katakana_words : hiragana_words;
+  } else {
+    data = script === 'katakana' ? katakana : hiragana;
+  }
+
+  document.getElementById('ref-title').textContent = `${script.charAt(0).toUpperCase() + script.slice(1)} ${isWords ? 'Words' : ''} Reference`;
+  
+  // Highlight active button
+  document.querySelectorAll('.ref-switch').forEach(btn => {
+    btn.classList.toggle('btn-primary', btn.dataset.refScript === script);
+    btn.classList.toggle('btn-outline', btn.dataset.refScript !== script);
+  });
+  
+  ui.renderReferenceTable(data);
 }

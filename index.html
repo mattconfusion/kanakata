@@ -52,22 +52,30 @@
 
             <!-- Script Selection -->
             <section id="screen-script-select" class="screen">
-                <h1>Select kana</h1>
-                <div class="quiz-card" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    <button class="btn-primary" data-script="hiragana">Hiragana</button>
-                    <button class="btn-primary" data-script="katakana">Katakana</button>
-                    <button class="btn-primary" data-script="hiragana" data-words="true">Hiragana Words</button>
-                    <button class="btn-primary" data-script="katakana" data-words="true">Katakana Words</button>
-                    <button class="btn-primary" data-script="hiragana" data-incremental="true">Hiragana Incremental</button>
-                    <button class="btn-primary" data-script="katakana" data-incremental="true">Katakana Incremental</button>
-                    <div style="grid-column: span 2; display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem;">
-                        <span style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05rem; text-align: center;">Start from tier</span>
+                <div class="quiz-card" style="width: 100%; max-width: 500px;">
+                    <h2 style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1rem; color: var(--text-secondary); margin: 0; width: 100%; text-align: center;">Incremental learning</h2>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; width: 100%;">
+                        <button class="btn-primary" data-script="hiragana" data-incremental="true">Hiragana</button>
+                        <button class="btn-primary" data-script="katakana" data-incremental="true">Katakana</button>
+                    </div>
+
+                    <h2 style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1rem; color: var(--text-secondary); margin: 1rem 0 0; width: 100%; text-align: center;">Practice</h2>
+
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem; width: 100%;">
+                        <span style="font-size: 0.7rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05rem; text-align: center;">Starting Tier</span>
                         <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem;">
-                            <button class="btn-outline tier-btn" data-tier="1">Tier 1</button>
-                            <button class="btn-outline tier-btn" data-tier="2">Tier 2</button>
-                            <button class="btn-outline tier-btn" data-tier="3">Tier 3</button>
-                            <button class="btn-outline tier-btn" data-tier="4">Tier 4</button>
+                            <button class="btn-outline tier-btn" data-tier="1">1</button>
+                            <button class="btn-outline tier-btn" data-tier="2">2</button>
+                            <button class="btn-outline tier-btn" data-tier="3">3</button>
+                            <button class="btn-outline tier-btn" data-tier="4">4</button>
                         </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; width: 100%;">
+                        <button class="btn-primary" data-script="hiragana">Single Hiragana</button>
+                        <button class="btn-primary" data-script="katakana">Single Katakana</button>
+                        <button class="btn-primary" data-script="hiragana" data-words="true">Hiragana Words</button>
+                        <button class="btn-primary" data-script="katakana" data-words="true">Katakana Words</button>
                     </div>
                 </div>
             </section>
@@ -107,7 +115,13 @@
     <div id="overlay" class="overlay">
         <div class="overlay-content">
             <button id="close-overlay" class="btn-icon close-overlay">✕</button>
-            <h2 id="ref-title">Hiragana Reference</h2>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                <h2 id="ref-title" style="margin: 0;">Reference</h2>
+                <div class="nav-buttons">
+                    <button class="btn-outline ref-switch" data-ref-script="hiragana">Hiragana</button>
+                    <button class="btn-outline ref-switch" data-ref-script="katakana">Katakana</button>
+                </div>
+            </div>
             <div class="ref-grid" id="ref-grid">
                 <!-- Rendered by ui.js -->
             </div>
