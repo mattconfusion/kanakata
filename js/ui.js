@@ -120,6 +120,9 @@ export function renderRomajiToKana(question, scriptData, scoreboard, composition
       <div class="kana-picker">
         ${unlockedKana.map(item => `<button class="picker-item" data-kana="${item.kana}">${item.kana}</button>`).join('')}
       </div>
+      <div class="nav-buttons" style="width: 100%; margin-top: 1rem;">
+          <button class="btn-outline hidden" id="reveal-btn" style="flex: 1;">Reveal</button>
+      </div>
     </div>
   `;
 }

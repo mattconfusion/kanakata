@@ -14,6 +14,7 @@ let currentQuiz = null;
 let currentMode = null; // 1, 2, or 3
 let currentScript = 'hiragana';
 let isWordMode = false;
+let isRevealed = false;
 
 // --- Incremental mode state ---
 const incState = {
@@ -27,6 +28,7 @@ const incState = {
   isReview: false,
   isMixedReview: false,
   reviewPhase: null,
+  isRevealed: false,
 };
 
 // --- Event Listeners ---
@@ -37,7 +39,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Home Screen: Mode Selection
   document.querySelectorAll('[data-mode]').forEach(btn => {
     btn.addEventListener('click', (e) => {
-      currentMode = parseInt(e.target.dataset.mode);
+      currentMode = parseInt(e.currentTarget.dataset.mode);
+      updateTierButtons();
       ui.switchScreen('scriptSelect');
     });
   });
@@ -45,12 +48,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // Script Selection
   document.querySelectorAll('[data-script]').forEach(btn => {
     btn.addEventListener('click', (e) => {
-      currentScript = e.target.dataset.script;
-      if (e.target.dataset.incremental) {
+      currentScript = e.currentTarget.dataset.script;
+      if (e.currentTarget.dataset.incremental) {
         const direction = currentMode === 2 ? 'romajiToKana' : 'kanaToRomaji';
         startIncrementalModeForScript(currentScript, direction);
       } else {
-        isWordMode = !!e.target.dataset.words;
+        isWordMode = !!e.currentTarget.dataset.words;
         startQuiz();
       }
     });
@@ -59,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
   updateTierButtons();
   document.querySelectorAll('.tier-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
-      const tier = parseInt(e.target.dataset.tier);
+      const tier = parseInt(e.currentTarget.dataset.tier);
       localStorage.setItem('tierProgress', tier);
       updateTierButtons();
       ui.showNotification(`Tier ${tier} set.`);
@@ -124,6 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Incremental mode
     if (e.target.id === 'inc-submit') handleIncSubmit();
+    if (e.target.id === 'inc-reveal-btn') handleIncReveal();
     if (e.target.classList.contains('inc-picker-item')) handleIncPicker(e.target.dataset.incKana);
     if (e.target.id === 'inc-start-drill') startIncDrill();
     if (e.target.id === 'inc-start-mixed-review') startIncMixedReview();
@@ -175,6 +179,7 @@ function startQuiz() {
 }
 
 function nextQuestion() {
+  isRevealed = false;
   const question = currentQuiz.generateQuestion();
   const scoreboard = {
     tier: currentQuiz.currentTier,
@@ -195,6 +200,7 @@ function nextQuestion() {
 }
 
 function handleAnswerSubmit() {
+  if (isRevealed) return;
   const input = document.getElementById('romaji-input');
   if (!input || !input.value) return;
 
@@ -203,9 +209,7 @@ function handleAnswerSubmit() {
   ui.renderFeedback(result, feedbackId);
 
   if (result.correct) {
-    if (currentMode === 1 || currentMode === 3) {
-      setTimeout(nextQuestion, 3000);
-    }
+    nextQuestion();
   } else {
     ui.showRevealButton();
     input.value = '';
@@ -214,6 +218,17 @@ function handleAnswerSubmit() {
 }
 
 function handleReveal() {
+  if (isRevealed) return;
+  isRevealed = true;
+
+  const input = document.getElementById('romaji-input');
+  if (input) input.disabled = true;
+  const submitBtn = document.getElementById('submit-answer');
+  if (submitBtn) submitBtn.disabled = true;
+  const revealBtn = document.getElementById('reveal-btn');
+  if (revealBtn) revealBtn.disabled = true;
+  document.querySelectorAll('.picker-item').forEach(btn => btn.disabled = true);
+
   const feedbackId = (currentMode === 1 || currentMode === 3) ? 'feedback-1' : 'feedback-2';
   const q = currentQuiz.currentQuestion;
   const answer = q.phonetic || (Array.isArray(q.romaji) ? q.romaji[0] : q.romaji);
@@ -229,6 +244,7 @@ function handleReveal() {
 }
 
 function handlePickerAnswer(kana) {
+  if (isRevealed) return;
   const result = currentQuiz.checkAnswer(kana, currentMode);
 
   const data = currentScript === 'katakana' ? katakana : hiragana;
@@ -243,12 +259,11 @@ function handlePickerAnswer(kana) {
   if (result.correct) {
     if (result.complete) {
       ui.renderFeedback(result, null, true);
-      setTimeout(nextQuestion, result.tierUnlocked ? 4000 : 3500);
+      nextQuestion();
     }
   } else {
-    ui.renderFeedback(result, null, true);
-    document.querySelectorAll('.picker-item').forEach(btn => btn.disabled = true);
-    setTimeout(nextQuestion, 2000);
+    ui.renderFeedback(result, null, false);
+    ui.showRevealButton();
   }
 }
 
@@ -313,6 +328,7 @@ function startIncMixedReview() {
 }
 
 function incNextQuestion() {
+  incState.isRevealed = false;
   if (incState.isReview) {
     let q;
     if (incState.isMixedReview) {
@@ -372,37 +388,69 @@ function renderIncQuiz(question) {
 }
 
 function handleIncSubmit() {
+  if (incState.isRevealed) return;
   const input = document.getElementById('inc-romaji-input');
   if (!input || !input.value.trim()) return;
 
   const answer = input.value.trim().toLowerCase();
   const correct = answer === incState.currentQuestion.romaji.toLowerCase();
-  processIncAnswer(correct);
-  if (!correct) {
+  
+  if (correct) {
+    processIncAnswer(true);
+  } else {
+    ui.showNotification(`Wrong — Try again!`, 2000, 'wrong');
+    const revealBtn = document.getElementById('inc-reveal-btn');
+    if (revealBtn) revealBtn.classList.remove('hidden');
     input.value = '';
     input.focus();
   }
 }
 
-
 function handleIncPicker(kana) {
+  if (incState.isRevealed) return;
   const correct = kana === incState.currentQuestion.kana;
-  processIncAnswer(correct);
+  
+  if (correct) {
+    processIncAnswer(true);
+  } else {
+    ui.showNotification(`Wrong — Try again!`, 2000, 'wrong');
+    const revealBtn = document.getElementById('inc-reveal-btn');
+    if (revealBtn) revealBtn.classList.remove('hidden');
+  }
+}
+
+function handleIncReveal() {
+  if (incState.isRevealed) return;
+  incState.isRevealed = true;
+
+  const input = document.getElementById('inc-romaji-input');
+  if (input) input.disabled = true;
+  const submitBtn = document.getElementById('inc-submit');
+  if (submitBtn) submitBtn.disabled = true;
+  const revealBtn = document.getElementById('inc-reveal-btn');
+  if (revealBtn) revealBtn.disabled = true;
+  document.querySelectorAll('.inc-picker-item').forEach(btn => btn.disabled = true);
+
+  const q = incState.currentQuestion;
+  ui.showNotification(`The answer was: ${q.kana} = ${q.romaji}`, 3000, 'wrong');
+
+  if (!incState.isReview) {
+    inc.recordAnswer(q.kana, false, incState.progress);
+    inc.saveProgress(incState.script, incState.direction, incState.progress);
+  }
+
+  setTimeout(incNextQuestion, 3000);
 }
 
 function processIncAnswer(correct) {
   const q = incState.currentQuestion;
 
-  const delay = correct ? 1800 : 2500;
-
   if (correct) {
     ui.showNotification(`Correct! ${q.kana} = ${q.romaji}`, 1800, 'correct');
-  } else {
-    ui.showNotification(`Wrong — ${q.kana} = ${q.romaji}`, 2500, 'wrong');
   }
 
   if (incState.isReview) {
-    setTimeout(incNextQuestion, delay);
+    incNextQuestion();
     return;
   }
 
@@ -413,7 +461,7 @@ function processIncAnswer(correct) {
     inc.advanceToMixed(incState.progress);
     inc.saveProgress(incState.script, incState.direction, incState.progress);
     ui.showNotification('Drill complete! Now mixed review…', 2500);
-    setTimeout(incNextQuestion, delay);
+    incNextQuestion();
     return;
   }
 
@@ -428,20 +476,20 @@ function processIncAnswer(correct) {
       const isLast = incState.progress.currentPhase >= incState.phases.length;
       inc.advancePhase(incState.progress, incState.phases);
       inc.saveProgress(incState.script, incState.direction, incState.progress);
-      setTimeout(() => uiInc.renderPhaseComplete(phase, stats, isLast), delay);
+      uiInc.renderPhaseComplete(phase, stats, isLast);
       return;
     } else {
       const score = incState.progress.mixedCorrect;
       inc.resetMixedRound(incState.progress);
       inc.saveProgress(incState.script, incState.direction, incState.progress);
       ui.showNotification(`${score}/20 — need 80% to pass. Try again!`, 3000, 'wrong');
-      setTimeout(incNextQuestion, delay);
+      incNextQuestion();
       return;
     }
   }
 
   inc.saveProgress(incState.script, incState.direction, incState.progress);
-  setTimeout(incNextQuestion, correct ? 1800 : 2500);
+  incNextQuestion();
 }
 
 function handleIncBack(target) {
@@ -450,21 +498,16 @@ function handleIncBack(target) {
     showIncPhaseMap();
   } else if (target === 'script') {
     incState.active = false;
+    updateTierButtons();
     ui.switchScreen('scriptSelect');
   }
 }
 
 function openReference(script) {
   let data;
-  const isWords = !incState.active && isWordMode;
-  
-  if (isWords) {
-    data = script === 'katakana' ? katakana_words : hiragana_words;
-  } else {
-    data = script === 'katakana' ? katakana : hiragana;
-  }
+  data = script === 'katakana' ? katakana : hiragana;
 
-  document.getElementById('ref-title').textContent = `${script.charAt(0).toUpperCase() + script.slice(1)} ${isWords ? 'Words' : ''} Reference`;
+  document.getElementById('ref-title').textContent = `${script.charAt(0).toUpperCase() + script.slice(1)} Reference`;
   
   // Highlight active button
   document.querySelectorAll('.ref-switch').forEach(btn => {

@@ -31,6 +31,7 @@ export class Quiz {
 
   checkAnswer(input, mode) {
     const q = this.currentQuestion;
+    const cleanInput = input.toLowerCase().trim();
     
     // Mode 2 (Romaji -> Kana) with Words requires composition
     if (mode === 2 && this.isWordMode) {
@@ -69,15 +70,18 @@ export class Quiz {
     }
 
     // Standard single-answer logic (Mode 1, Mode 3, or Mode 2 without words)
-    const answerKey = q.phonetic || q.romaji;
-    let isCorrect = false;
+    const rawAnswerKey = q.phonetic || q.romaji;
+    let answerKeys = [];
 
-    if (Array.isArray(answerKey)) {
-      isCorrect = answerKey.some(t => t.toLowerCase().trim() === input.toLowerCase().trim());
-    } else {
-      isCorrect = (input.toLowerCase().trim() === answerKey.toLowerCase().trim()) ||
-                  (input === q.kana);
+    if (Array.isArray(rawAnswerKey)) {
+      answerKeys = rawAnswerKey;
+    } else if (typeof rawAnswerKey === 'string') {
+      // Split by / to handle "shi / yon" style entries
+      answerKeys = rawAnswerKey.split('/').map(s => s.trim());
     }
+
+    const isCorrect = answerKeys.some(key => key.toLowerCase().trim() === cleanInput) ||
+                      (input === q.kana);
     
     if (isCorrect) {
       const points = q.kana.length > 1 ? q.kana.length : 1;

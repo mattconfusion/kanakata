@@ -102,7 +102,10 @@ export function renderKanaToRomajiQuiz(question, progress, isReview) {
     <div class="quiz-card">
       <div class="large-kana" style="font-size: ${fontSize}">${question.kana}</div>
       <input type="text" id="inc-romaji-input" placeholder="Type romaji…" autocomplete="off" autofocus>
-      <button class="btn-primary" id="inc-submit" style="width: 100%;">Submit</button>
+      <div class="nav-buttons" style="width: 100%; gap: 0.5rem; margin-top: 0.5rem;">
+          <button class="btn-primary" id="inc-submit" style="flex: 1;">Submit</button>
+          <button class="btn-outline hidden" id="inc-reveal-btn" style="flex: 1;">Reveal</button>
+      </div>
     </div>
     <button class="btn-outline" data-inc-back="map" style="margin-top: 0.5rem; font-size: 0.875rem;">← Map</button>
   `;
@@ -135,6 +138,9 @@ export function renderRomajiToKanaQuiz(question, pickerSymbols, progress, isRevi
     <div class="quiz-card">
       <div class="romaji-label" style="font-size: ${fontSize}">${romajiText}</div>
       <div class="kana-picker">${pickerButtons}</div>
+      <div class="nav-buttons" style="width: 100%; margin-top: 1rem;">
+          <button class="btn-outline hidden" id="inc-reveal-btn" style="flex: 1;">Reveal</button>
+      </div>
     </div>
     <button class="btn-outline" data-inc-back="map" style="margin-top: 0.5rem; font-size: 0.875rem;">← Map</button>
   `;
